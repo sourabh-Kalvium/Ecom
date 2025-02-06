@@ -3,6 +3,7 @@ require("dotenv").config()
 
 const connection =require("./db/connection")
 
+const userRoute = require('./controllers/userRoute');
 
 
 app.get("/test",async(req,res)=>{
