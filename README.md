@@ -21,4 +21,4 @@ Responsive UI Designed for smooth customer experience with varying screen sizes.
 ## ????️ Technologies Used
 - **React.js** - Component-based UI development
 - **CSS** - Styling for the form and layout
-- **React Icons** - Icons for email and password field
+- **React Icons** - Icons for email and password field.
