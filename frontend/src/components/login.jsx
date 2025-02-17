@@ -3,7 +3,8 @@ import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { useState } from "react";
 
-function Login() {
+
+function Login(props) {
 
     let [hide,sethide]=useState(true)
     const handlehide=()=>{
@@ -31,9 +32,9 @@ function Login() {
           <div className="flex  w-8/10 m-auto">
             <input
               type= {hide?"password":"text"}
-              className="border-1 w-[88%] block m-auto h-8 rounded-tl-md rounded-bl-md"/>
+              className="border-1 w-[88%] block m-auto h-8 rounded-tl-md rounded-bl-md "/>
 
-              {hide?<FaRegEye className="border " onClick={handlehide}/>:<FaRegEyeSlash onClick={handlehide}/>}
+              {hide?<FaRegEye className="border-1 h-8 ml-0 mr-5 w-6" onClick={handlehide}/>:<FaRegEyeSlash className="border-1 h-8 ml-0 mr-5 w-6" onClick={handlehide}/>}
             
           </div>
 
@@ -53,12 +54,15 @@ function Login() {
             className=" w-8/10 block m-auto bg-blue-500 rounded-m mt-5 h-8 rounded-md"
           >
             {" "}
-            Submit
+            <p className="text-xl font-bold text-white">Login</p>
+
           </button>
 
-          <h6 className="ml-9">Not have any account?</h6>
+
+          <h6 onClick={props.signupClick} className="ml-9">Not have any account?</h6>
         </div>
       </div>
+     
     </>
   );
 }

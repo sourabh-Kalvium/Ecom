@@ -114,6 +114,41 @@ const upload=require("../middleware/multer")
     res.status(200).json("Uploaded")
 }))
 
+userRoute.post(
+  "/login",
+  catchAsyncError(async (req, res, next) => {
+    const { email, pass } = req.body;
+    if (!email || !pass) {
+      next(new Errorhadler("email and password are reqires", 400));
+    }
+
+    let user = UserModel.findOne({ email });
+    if (!user) {
+      next(new Errorhadler("pls signup", 400));
+    }
+
+    if(!user.isActivated){
+      next(new Errorhadler("pls signup", 400));
+    }
+    let isMatching = await bcrypt.compare(pass, user.pass);
+  
+    
+    if (!isMatching) {
+      next(new Errorhadler("password is incorrect", 400));
+    }
+
+
+    let token = jwt.sign({ id: user._id }, process.env.SECRET, {
+      expiresIn: 60 * 60 * 60 * 24 * 30,
+    });
+    res.cookies("accesstoken", token, {
+      httpOnly: true,
+      MaxAge: "5d",
+    });
+    res.status(200).json({status:true,message:"login successful"})
+  })
+);
+
 
 
 
