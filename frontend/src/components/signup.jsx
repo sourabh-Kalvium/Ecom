@@ -1,12 +1,21 @@
 import React, { useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
+import {useNavigate} from "react-router-dom";
 
-let url = "http://localhost/user/signup";
+
+let url = "http://localhost:8979/user/signup";
+import axios from "axios"
 
 function Signup(props) {
+  const nav=useNavigate();
+
+
   let [hidePassword, setHidePassword] = useState(true);
   let [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+   let [err,setErr]=useState("")
+
+   const [load,setLoad]=useState(false)
 
   const handleHidePassword = () => {
     setHidePassword(!hidePassword);
@@ -17,32 +26,57 @@ function Signup(props) {
   };
 
   const [data, setData] = useState({
-    username: "", // Added username field
+    name: "", // Added username field
     email: "",
     password: "",
-    confirmPassword: "", // Consistent naming
+    confirmPassword: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
     console.log(data); // Will log the data as the state is updated
+    setErr("")
   };
 
-  const handleSubmit = () => {
-    const { username, email, password, Confirm_password } = data;
+  const handleSubmit = async(e) => {
+    e.preventDefault()
+    
+    const { name, email, password, confirmPassword } = data;
 
-    if (!username || !email || !password || !Confirm_password) {
-      console.log("All fields are required.");
+    if (!name || !email || !password || !confirmPassword) {
+      setErr("All fields are required.");
       return;
     }
 
-    if (password !== Confirm_password) {
-      console.log("Passwords do not match.");
+    if (password !== confirmPassword) {
+      setErr("Passwords do not match.");
       return;
     }
+      
+   setLoad(true)
+    try {
+      await axios.post(url, data)
+        setLoad(true)
+        // nav("/")
+    } catch (error) {
+      setErr(error.message)
+      console.log(error);
+      setLoad(false)
+    }
 
-    console.log("Form submitted:", data);
+   
+     
+
+    // Reset the form data after submission
+    setData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+
+     
   };
 
   return (
@@ -59,8 +93,8 @@ function Signup(props) {
             onChange={handleChange}
             type="text"
             className="border-1 w-8/10 block m-auto h-8 rounded-md"
-            name="username"
-            value={data.username}
+            name="name"
+            value={data.name}
           />
 
           {/* Email input */}
@@ -133,6 +167,7 @@ function Signup(props) {
           </div>
 
           {/* Submit button */}
+          <p className="text-red-500">{err}</p>
           <button
             onClick={handleSubmit}
             type="submit"
@@ -141,6 +176,8 @@ function Signup(props) {
             <p className="text-xl font-bold text-white">Signup</p>
           </button>
         </div>
+          {console.log(load,"000000")}
+        {load&&<div><img className="animate-spin width-[30px] " src="https://cdn-icons-png.flaticon.com/512/152/152565.png"  /></div>}
       </div>
     </>
   );

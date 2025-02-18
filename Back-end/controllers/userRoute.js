@@ -10,50 +10,31 @@ const upload=require("../middleware/multer")
   
 
 
-// userRoute.post("/login", async (req, res) => {
-//     console.log(req.body)
-
-//     try {
-//       const { email, pass , } = req.body;
-  
-//       if (email && pass) {
-//         let nweUser = new UserModel({ email, pass });
-//         await nweUser.save();
-//         res.status(200).send({ message: "login is success" });
-//       } else {
-//         res.status(400).send({ message: "🤞invalid" });
-//       }
-//     } catch (error) {
-//       res.status(500).send({ message: "internal server error" });
-  
-//     }
-//   });
-
 
 
 
 
 
   userRoute.post("/signup",catchAsyncError( async (req, res, next) => {
-    console.log(req.body)
+       console.log(req.body)
 
    
-      const {name, email, pass } = req.body;
+      const {name, email, password } = req.body;
   
-      if (!email || !pass ||!name) {
+      if (!email || !password ||!name) {
         next(new Errorhadler("name,email and password required",400))
       } 
       let user=await UserModel.findOne({email:email})
       if(user){
-        next(new Errorhadler("user is already exist",400))
+        next(new Errorhadler("user is already exist..........",400))
       }
 
-      bcrypt.hash(pass,5,async(err,hash)=>{
+      bcrypt.hash(password,5,async(err,hash)=>{
 
           if(err){
             next(new Errorhadler("server error",500))
           }
-          let newUser=new UserModel({name,email,pass:hash})
+          let newUser=new UserModel({name,email,password:hash})
           
 
 
@@ -114,11 +95,9 @@ const upload=require("../middleware/multer")
     res.status(200).json("Uploaded")
 }))
 
-userRoute.post(
-  "/login",
-  catchAsyncError(async (req, res, next) => {
-    const { email, pass } = req.body;
-    if (!email || !pass) {
+userRoute.post("/login",catchAsyncError(async (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
       next(new Errorhadler("email and password are reqires", 400));
     }
 
@@ -130,24 +109,27 @@ userRoute.post(
     if(!user.isActivated){
       next(new Errorhadler("pls signup", 400));
     }
-    let isMatching = await bcrypt.compare(pass, user.pass);
-  
-    
-    if (!isMatching) {
-      next(new Errorhadler("password is incorrect", 400));
-    }
 
+    bcrypt.compare(password, user.password, function(err, result) {
+      if(err){
+        next(new Errorhadler("internal server error", 500));
+      }
+      if(!result){
+        next(new Errorhadler("password is incorrect", 400));
+      }
 
-    let token = jwt.sign({ id: user._id }, process.env.SECRET, {
-      expiresIn: 60 * 60 * 60 * 24 * 30,
+      let token = jwt.sign({ id: user._id }, process.env.SECRET, {
+        expiresIn: 60 * 60 * 60 * 24 * 30,
+      });
+      res.cookies("accesstoken", token, {
+        httpOnly: true,
+        MaxAge: "5d",
+      });
+      res.status(200).json({status:true,message:"login successful"})
+
+      
     });
-    res.cookies("accesstoken", token, {
-      httpOnly: true,
-      MaxAge: "5d",
-    });
-    res.status(200).json({status:true,message:"login successful"})
-  })
-);
+  }));
 
 
 
