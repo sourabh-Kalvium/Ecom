@@ -79,6 +79,7 @@ const upload=require("../middleware/multer")
           let id=decoded.id
           await UserModel.findByIdAndUpdate(id,{isActivated:true})
           
+          res.redirect("http://localhost:5173/login")
           
           res.status(200).json({status:true,message:"activation is completed"})
 
@@ -97,20 +98,23 @@ const upload=require("../middleware/multer")
 
 userRoute.post("/login",catchAsyncError(async (req, res, next) => {
     const { email, password } = req.body;
+    console.log(email)
     if (!email || !password) {
       next(new Errorhadler("email and password are reqires", 400));
     }
 
-    let user = UserModel.findOne({ email });
+    let user = await UserModel.findOne({ email });
+    console.log(user,"9999999999999")
+
     if (!user) {
-      next(new Errorhadler("pls signup", 400));
+      next(new Errorhadler("Please Signup", 400));
     }
 
     if(!user.isActivated){
-      next(new Errorhadler("pls signup", 400));
+      next(new Errorhadler("Please Signup", 400));
     }
 
-    bcrypt.compare(password, user.password, function(err, result) {
+    await bcrypt.compare(password, user.password, function(err, result) {
       if(err){
         next(new Errorhadler("internal server error", 500));
       }
@@ -121,7 +125,7 @@ userRoute.post("/login",catchAsyncError(async (req, res, next) => {
       let token = jwt.sign({ id: user._id }, process.env.SECRET, {
         expiresIn: 60 * 60 * 60 * 24 * 30,
       });
-      res.cookies("accesstoken", token, {
+      res.cookie("accesstoken", token, {
         httpOnly: true,
         MaxAge: "5d",
       });

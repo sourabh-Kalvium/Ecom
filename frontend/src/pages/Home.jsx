@@ -1,9 +1,10 @@
 import React from 'react';
+import ProductPage from './productpage';
 
 function Home(){
-       return(
-        <h1 className="bg-amber-50">Welcome</h1>
-       )
+      return(
+      <ProductPage/>
+      )
 }
 
 export default Home
