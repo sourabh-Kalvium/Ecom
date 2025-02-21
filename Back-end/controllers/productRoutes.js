@@ -23,7 +23,6 @@ productRouter.post("/createProduct",productUpload.array("images",10), catchAsync
     let product=new ProductModel({email,name, description,category,tags,price,images,stock})
   
 
-    //product.images=images.map(image=>`http://localhost:8975/${image}`)
     await product.save()
     res.status(201).json({message:"Product created successfully"})
 
