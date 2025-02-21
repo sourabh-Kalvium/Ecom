@@ -11,6 +11,8 @@ app.use(cors({
 
 const {userRoute} = require('./controllers/userRoute');
 
+const productRouter = require("./controllers/productRoutes");
+
 
 
 app.get("/test", async (req, res) => {
@@ -19,6 +21,7 @@ app.get("/test", async (req, res) => {
 
 
 app.use("/user",userRoute)
+app.use("/product", productRouter);
 
 
 

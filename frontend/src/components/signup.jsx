@@ -39,7 +39,7 @@ function Signup(props) {
 
     try {
       await axios
-        .post("http://localhost:8977/user/signup", {
+        .post("http://localhost:8975/user/signup", {
           name,
           email,
           password,
@@ -48,7 +48,7 @@ function Signup(props) {
       console.log("Successfully registered");
     } catch (error) {
       console.log(error);
-      setErr(error.message);
+      setErr(resizeBy.data.message);
     }
   };
 

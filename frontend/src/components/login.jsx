@@ -31,13 +31,13 @@ function Login(props) {
 
     try {
       await axios
-        .post("http://localhost:8978/user/login", {
+        .post("http://localhost:8975/user/login", {
           email,
           password,
         })
         .then((response) => {
           console.log(response,"888")
-          // navigate("/");
+          navigate("/");
         });
 
       console.log("Login successful");

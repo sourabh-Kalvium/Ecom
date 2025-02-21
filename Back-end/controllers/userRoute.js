@@ -1,15 +1,13 @@
 let express=require("express")
-const { UserModel } = require("../model/userModel");
+const UserModel = require("../model/userModel");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const Errorhadler=require("../utils/errorhadler")
 const bcrypt=require("bcrypt")
 const jwt=require("jsonwebtoken")
 const { sendMail } =require("../utils/mail")
 let userRoute= express.Router()
-const upload=require("../middleware/multer")
+const {upload}=require("../middleware/multer")
   
-
-
 
 
 

@@ -40,7 +40,8 @@ const userSchema =mongoose.Schema({
     },
     role:{
         type:String,
-        default:"user"
+        default:"user",
+        enum:["user","seller","admin"]
     },
     address:{
         type:addressSchema
@@ -55,4 +56,4 @@ const userSchema =mongoose.Schema({
 
 const UserModel =mongoose.model("user",userSchema)
 
-module.exports={UserModel}
+module.exports=UserModel

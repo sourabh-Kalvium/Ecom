@@ -6,6 +6,7 @@ import './App.css'
 import Login from './pages/login'
 import Home from './pages/Home'
 import Navbar from './pages/Navbar'
+import Createproudct from './components/Createproudct'
 function App() {
   
 
@@ -16,6 +17,7 @@ function App() {
        <Routes>
             <Route  path="/"  element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
+            <Route path="/create" element={<Createproudct/>}></Route>
 
        </Routes>
      </BrowserRouter>
