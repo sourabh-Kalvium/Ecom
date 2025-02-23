@@ -10,7 +10,7 @@ const productSchema= mongoose.Schema({
         required:true
     },
     tags:{
-        type:String,
+        type:[String],
         required:true
     },
 
