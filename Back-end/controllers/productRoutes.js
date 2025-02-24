@@ -29,6 +29,7 @@ productRouter.post("/create-product",productUpload.array("images",10), catchAsyn
 
 }))
 
+
 productRouter.get("/allproduct", catchAsyncError(async(req, res, next)=>{
       
      let allProduct = await ProductModel.find()

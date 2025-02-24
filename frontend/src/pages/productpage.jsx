@@ -1,5 +1,4 @@
 import ProductCard from "../components/product";
-import productDetails from "../data.json"
 import { useEffect ,useState} from "react";
 import axios from "axios"
 
@@ -32,7 +31,7 @@ export default function ProductPage() {
     return (
       <div className="w-full min-h-screen bg-neutral-800">
         <div className="grid grid-cols-5 gap-4 p-4">
-          {productDetails.map((product, index) => (
+          {data.map((product, index) => (
             <ProductCard key={index} {...product} />
           ))}
         </div>

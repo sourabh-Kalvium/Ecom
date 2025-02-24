@@ -25,6 +25,7 @@ console.log(path.join(__dirname, 'uploadproducts'))
 
 
 app.use('/profile-photo', express.static(path.join(__dirname, 'uploads')));
+
 app.use('/products-photo', express.static(path.join(__dirname, 'uploadproducts')));
 
 app.use("/user",userRoute)

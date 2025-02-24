@@ -1,9 +1,12 @@
-export default function ProductCard({ name, image, description, price }) {
+import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowForward } from "react-icons/io";
+export default function ProductCard({ name, images, description, price }) {
   return (
     <div className="bg-white p-3 rounded-lg shadow-md transition-all transform hover:scale-105 hover:shadow-lg hover:cursor-pointer flex flex-col justify-between duration-300 ease-in-out max-w-xs">
       <div className="w-full">
+        <IoIosArrowBack/>
         <img
-          src={image}
+          src={`http://localhost:8080/products-photo/${images[0]}`} 
           alt={name}
           className="w-full h-48 object-cover rounded-lg mb-3 transition-transform duration-300 ease-in-out hover:scale-105"
         />
