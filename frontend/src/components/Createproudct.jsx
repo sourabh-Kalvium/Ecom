@@ -1,31 +1,49 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
-
+import { useLocation } from "react-router-dom";
 
 function CreateProduct() {
+
+    const location = useLocation();
+
+    const { _id, email, name, description, category, tags, price, stock, images, edit } = location.state
+    console.log(location.state, "8888888888")
+    // if(tags){
+    //     // tags=tags[0].join(",")
+    //     console.log(tags)
+    // }
+    let prevImg = []
+    if (images) {
+        images.forEach((ele, ind) => (
+            prevImg.push(`http://localhost:8080/products-photo/${ele}`)
+        ))
+    }
+    console.log(prevImg)
     const [formData, setFormData] = useState({
-        email: "",
-        name: "",
-        description: "",
-        category: "",
-        tags: [],
-        price: "",
-        stock: "",
+        email: email || "",
+        name: name || "",
+        description: description || "",
+        category: category || "",
+        tags: tags || [],
+        price: price || "",
+        stock: stock || "",
         images: [],
-        previewImg: []
+        previewImg: images ? prevImg : []
     });
 
-    const handleChange = (e) => {
 
-        if(e.target.name ==="tags"){
-            
-            let tagArr=e.target.value.split(",")
-            let trimmedtagArr=tagArr.map((ele)=>{
+
+    const handleChange = (e) => {
+        console.log("hhjhghg")
+        if (e.target.name === "tags") {
+
+            let tagArr = e.target.value.split(",")
+            let trimmedtagArr = tagArr.map((ele) => {
                 return ele.trim()
             })
             console.log(trimmedtagArr)
-            setFormData({...formData,tags:trimmedtagArr})
+            setFormData({ ...formData, tags: trimmedtagArr })
         }
         else if (e.target.name === "images") {
             const files = e.target.files;
@@ -43,7 +61,7 @@ function CreateProduct() {
         }
     };
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const { email, name, description, category, tags, price, stock, images } = formData;
 
@@ -55,71 +73,77 @@ function CreateProduct() {
         console.log({
             email, name, description, category, tags, price, stock, images
         }, "form data");
-    
-    const multiPartFormData=new FormData;
-    multiPartFormData.append("name",name);
-    multiPartFormData.append("description",description);
-    multiPartFormData.append("category",category);
-    multiPartFormData.append("tags",tags);
-    multiPartFormData.append("price",price);
-    multiPartFormData.append("stock",stock);
-    multiPartFormData.append("email",email);
 
-    if(Array.isArray(images)){
-        images.forEach(image => {
-            multiPartFormData.append("images",image)
-        });
-    }
+        const multiPartFormData = new FormData;
+        multiPartFormData.append("name", name);
+        multiPartFormData.append("description", description);
+        multiPartFormData.append("category", category);
+        multiPartFormData.append("tags", tags);
+        multiPartFormData.append("price", price);
+        multiPartFormData.append("stock", stock);
+        multiPartFormData.append("email", email);
 
-    try {
-        const response=await axios.post("http://localhost:8975/product/createProduct",multiPartFormData,{
-            headers:{
-                "Content-Type":"multipart/form-data"
-            },
-        })
+        if (Array.isArray(images)) {
+            images.forEach(image => {
+                multiPartFormData.append("images", image)
+            });
+        }
 
-        if(response.status===201){
-            console.log(response)
-            alert("Product Created Successfully");
-             setFormData({});
-       }
-    } 
+        try {
+            const response = await axios.post("http://localhost:8975/product/createProduct", multiPartFormData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+            })
+
+            if (response.status === 201) {
+                console.log(response)
+                alert("Product Created Successfully");
+                setFormData({});
+            }
+        }
+
+        catch (error) {
+            console.log("Error", error)
+            alert("Product is Not Created")
+        }
+
+    };
+
+
+    const handleEdit = () => {
         
-    catch (error) {
-        console.log("Error",error)
-        alert("Product is Not Created")
     }
-};
 
 
     let categoryArr = ["Electronic", "Groceries", "Fashion", "Dairy"];
 
     return (
-        
+
         <div className='flex justify-center items-center min-h-screen bg-cover bg-center' style={{ backgroundImage: "url('https://source.unsplash.com/1600x900/?office,technology')" }}>
             <div className='w-full max-w-lg bg-white p-6 rounded-lg shadow-lg backdrop-blur-md bg-opacity-90'>
                 <h2 className='text-2xl font-bold text-gray-800 mb-6 text-center'>Create a New Product</h2>
-               
+
                 <form onSubmit={handleSubmit} className='space-y-4'>
                     <div>
                         <label className='block font-medium text-gray-700'>Email</label>
-                        <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="email" placeholder='Enter your email' name="email" onChange={handleChange} required />
+                        <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="email" placeholder='Enter your email' name="email" value={formData.email} onChange={handleChange} required />
                     </div>
 
                     <div>
                         <label className='block font-medium text-gray-700'>Name</label>
-                        <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="text" placeholder='Enter product name' name="name" onChange={handleChange} required />
+                        <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="text" placeholder='Enter product name' name="name" value={formData.name} onChange={handleChange} required />
                     </div>
 
                     <div>
                         <label className='block font-medium text-gray-700'>Description</label>
-                        <textarea className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' name="description" onChange={handleChange} required></textarea>
+                        <textarea className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' value={formData.description} name="description" onChange={handleChange} required></textarea>
                     </div>
 
                     <div>
                         <label className='block font-medium text-gray-700'>Category</label>
                         <select className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' name="category" onChange={handleChange} required>
-                            <option value="">Choose a category</option>
+                            <option value="">{formData.category ? formData.category : "Choose a category"}</option>
                             {categoryArr.map((ele, index) => (
                                 <option key={index} value={ele}>{ele}</option>
                             ))}
@@ -128,7 +152,7 @@ function CreateProduct() {
 
                     <div>
                         <label className='block font-medium text-gray-700'>Tags <i className='text-red-100'>add multiple tags seperated by coma</i></label>
-                        <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="text" placeholder='Enter product tag' name="tags" onChange={handleChange} />
+                        <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="text" placeholder='Enter product tag' name="tags" value={formData.tags} onChange={handleChange} />
                     </div>
 
                     <div className='flex space-x-4'>
@@ -157,9 +181,14 @@ function CreateProduct() {
                         ))}
                     </div>
 
-                    <button type="submit" className='w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition'>
+                    {edit ? <button onClick={handleEdit} className='w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition'>
+                        edit
+                    </button> : <button type="submit" className='w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition'>
                         Submit
                     </button>
+
+                    }
+
                 </form>
             </div>
         </div>

@@ -7,6 +7,7 @@ import Login from './pages/login'
 import Home from './pages/Home'
 import Navbar from './pages/Navbar'
 import Createproudct from './components/Createproudct'
+import SellerProcutPage from "./pages/SellerProductPage"
 function App() {
   
 
@@ -18,6 +19,7 @@ function App() {
             <Route  path="/"  element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/create" element={<Createproudct/>}></Route>
+            <Route path="/modify" element={<SellerProcutPage/>}></Route>
 
        </Routes>
      </BrowserRouter>
