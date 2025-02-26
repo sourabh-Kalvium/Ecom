@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 export default function ProductCard({ _id,email, name, description, category, tags, price, stock, images ,role}) {
 
   let navigate =useNavigate()
+  
   const edit =()=>{
-   
     navigate("/create" ,{state:{ _id,email, name, description, category, tags, price, stock, images ,role,edit:true}})
   }
 

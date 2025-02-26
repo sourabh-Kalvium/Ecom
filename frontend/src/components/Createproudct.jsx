@@ -1,38 +1,57 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
-import { useLocation } from "react-router-dom";
-
+import { data, useLocation } from "react-router-dom";
+import { IoCloseCircleOutline } from "react-icons/io5";
 function CreateProduct() {
 
     const location = useLocation();
+    const productData =location.state || {}
+    const { _id, email, name, description, category, tags, price, stock, images, edit } = productData
 
-    const { _id, email, name, description, category, tags, price, stock, images, edit } = location.state
-    console.log(location.state, "8888888888")
-    // if(tags){
-    //     // tags=tags[0].join(",")
-    //     console.log(tags)
-    // }
+    
+    
     let prevImg = []
     if (images) {
         images.forEach((ele, ind) => (
             prevImg.push(`http://localhost:8080/products-photo/${ele}`)
         ))
     }
-    console.log(prevImg)
+  
     const [formData, setFormData] = useState({
-        email: email || "",
-        name: name || "",
-        description: description || "",
-        category: category || "",
-        tags: tags || [],
-        price: price || "",
-        stock: stock || "",
+        email: "",
+        name: "",
+        description: "",
+        category:"",
+        tags: [],
+        price: "",
+        stock: "",
         images: [],
-        previewImg: images ? prevImg : []
+        previewImg:[]
     });
 
+    useEffect(()=>{
+        setFormData({
+            ...formData,
+            email,
+            name,
+            description,
+            category,
+            tags,
+            price,
+            stock,
+            images,
+            previewImg:prevImg
+        })
+    },[productData])
+   
 
+    const handleDeletePrevImg =(index)=>{
+        let filterdImage=formData.images.filter((ele,ind)=>(ind!=index))
+        let filterdPreviewImg=formData.previewImg.filter((ele,ind)=>(ind!=index))
+        setFormData({...formData,images:filterdImage,previewImg:filterdPreviewImg})
+        console.log(filterdImage)
+    }
 
     const handleChange = (e) => {
         console.log("hhjhghg")
@@ -63,6 +82,7 @@ function CreateProduct() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("jjjj")
         const { email, name, description, category, tags, price, stock, images } = formData;
 
         if (!email || !name || !description || !category || !price || !stock) {
@@ -111,9 +131,11 @@ function CreateProduct() {
     };
 
 
-    const handleEdit = () => {
-        
+    const handleEdit = (e) => {
+        e.preventDefault()
+        console.log(formData)
     }
+
 
 
     let categoryArr = ["Electronic", "Groceries", "Fashion", "Dairy"];
@@ -123,8 +145,8 @@ function CreateProduct() {
         <div className='flex justify-center items-center min-h-screen bg-cover bg-center' style={{ backgroundImage: "url('https://source.unsplash.com/1600x900/?office,technology')" }}>
             <div className='w-full max-w-lg bg-white p-6 rounded-lg shadow-lg backdrop-blur-md bg-opacity-90'>
                 <h2 className='text-2xl font-bold text-gray-800 mb-6 text-center'>Create a New Product</h2>
-
-                <form onSubmit={handleSubmit} className='space-y-4'>
+                
+                <form  className='space-y-4'>
                     <div>
                         <label className='block font-medium text-gray-700'>Email</label>
                         <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="email" placeholder='Enter your email' name="email" value={formData.email} onChange={handleChange} required />
@@ -158,11 +180,11 @@ function CreateProduct() {
                     <div className='flex space-x-4'>
                         <div className='w-1/2'>
                             <label className='block font-medium text-gray-700'>Price</label>
-                            <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="number" name="price" onChange={handleChange} required />
+                            <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="number" name="price" onChange={handleChange} value={formData.price} required />
                         </div>
                         <div className='w-1/2'>
                             <label className='block font-medium text-gray-700'>Stock</label>
-                            <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="number" name="stock" onChange={handleChange} required />
+                            <input className='border p-2 w-full rounded-md focus:ring-2 focus:ring-blue-500' type="number" name="stock" onChange={handleChange} value={formData.stock} required />
                         </div>
                     </div>
 
@@ -177,13 +199,17 @@ function CreateProduct() {
 
                     <div className='flex flex-wrap gap-2 mt-2'>
                         {formData.previewImg.map((img, index) => (
+                          <div key={index}> 
+                            <IoCloseCircleOutline onClick={()=>handleDeletePrevImg(index)} className='relative left-15 ' />
                             <img key={index} src={img} alt={`Preview ${index}`} className='w-20 h-20 object-cover rounded-md shadow-md' />
+                          </div>
+                            
                         ))}
                     </div>
 
                     {edit ? <button onClick={handleEdit} className='w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition'>
                         edit
-                    </button> : <button type="submit" className='w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition'>
+                    </button> : <button  onClick={handleSubmit} className='w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition'>
                         Submit
                     </button>
 
