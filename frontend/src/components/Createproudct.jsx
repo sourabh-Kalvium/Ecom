@@ -81,7 +81,7 @@ function CreateProduct() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+      
         console.log("jjjj")
         const { email, name, description, category, tags, price, stock, images } = formData;
 
@@ -132,7 +132,7 @@ function CreateProduct() {
 
 
     const handleEdit = (e) => {
-        e.preventDefault()
+      
         console.log(formData)
     }
 
