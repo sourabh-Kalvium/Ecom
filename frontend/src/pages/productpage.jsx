@@ -9,6 +9,7 @@ import axios from "axios"
 export default function ProductPage() {
    
     let [data,setData]=useState([])
+   
     
     useEffect(() => {
       const fetchData = async () => {
@@ -27,12 +28,14 @@ export default function ProductPage() {
       fetchData();  
   }, []);
 
+  
+
 
     return (
       <div className="w-full min-h-screen bg-neutral-800">
         <div className="grid grid-cols-5 gap-4 p-4">
           {data.map((product, index) => (
-            <ProductCard key={index} {...product} />
+            <ProductCard key={index} {...product}  />
           ))}
         </div>
       </div>

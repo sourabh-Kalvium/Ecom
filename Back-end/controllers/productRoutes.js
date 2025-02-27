@@ -6,6 +6,7 @@ const productRouter= express.Router()
 const UserModel = require("../model/userModel")
 const {productUpload}=require("../middleware/multer")
 let path=require('path')
+const mongoose=require("mongoose")
 
 
 productRouter.post("/create-product",productUpload.array("images",10), catchAsyncError(async(req, res, next)=>{
@@ -51,6 +52,44 @@ productRouter.get("/allproduct", catchAsyncError(async(req, res, next)=>{
 
 
 
+productRouter.delete("/delete/:id",catchAsyncError(async(req,res,next)=>{
+    console.log("kjmk")
+       let id=req.params.id
+       if(!id){
+         return next(new Errorhadler("id is not passed",400))
+       }
+       if (!mongoose.Types.ObjectId.isValid(id)) {
+        return next(new Errorhadler("Invalid ObjectId", 400));
+       }
+       const deletedProduct = await ProductModel.findByIdAndDelete(id);
+       if (!deletedProduct) {
+           return next(new Errorhadler("Product not found", 404));
+       }
+       res.status(200).json({status:true,message:"deleted successfully"})
+       
+}))
+
+
+
+productRouter.put("/update/:id",catchAsyncError(async(req,res,next)=>{
+    
+    let id=req.params.id
+    if(!id){
+      return next(new Errorhadler("id is not passed",400))
+    }
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+     return next(new Errorhadler("Invalid ObjectId", 400));
+    }
+    
+    const { email,name, description,category,tags,price,stock} = req.body;
+    console.log(req.files)
+    // const images =req.files.map((file)=>file.path);
+    // console.log(email,name, description,category,tags,price,images);
+
+    await ProductModel.findByIdAndUpdate(id,req.body)
+    res.status(200).json({status:true,message:"updated successfully"})
+    
+}))
 
 
 

@@ -9,7 +9,7 @@ function CreateProduct() {
     const productData =location.state || {}
     const { _id, email, name, description, category, tags, price, stock, images, edit } = productData
 
-    
+    console.log(images)
     
     let prevImg = []
     if (images) {
