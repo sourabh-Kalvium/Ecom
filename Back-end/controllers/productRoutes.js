@@ -11,13 +11,15 @@ const mongoose=require("mongoose")
 
 productRouter.post("/create-product",productUpload.array("images",10), catchAsyncError(async(req, res, next)=>{
     const { email,name, description,category,tags,price,stock} = req.body;
-    const images =req.files.map((file)=>file.path);
+
+    const images =req.files.map((file)=>path.basename(file.path));
     console.log(email,name, description,category,tags,price,images);
 
     if (!email ||!name ||!description ||!category ||!tags ||!price ||!images ||!stock) {
        return  next(new Errorhadler("All fields are required",400))
     }
     let user=await UserModel.findOne({email})
+    console.log(email)
     if(!user){
         return next(new Errorhadler("user is not exist",404))
     }
@@ -34,19 +36,7 @@ productRouter.post("/create-product",productUpload.array("images",10), catchAsyn
 productRouter.get("/allproduct", catchAsyncError(async(req, res, next)=>{
       
      let allProduct = await ProductModel.find()
-
-     if (allProduct && allProduct.length > 0) { 
-        allProduct = allProduct.map((product) => {
-            if (product.images && product.images.length > 0) {
-                product.images = product.images.map((ele) => path.basename(ele));
-            }
-            return product; 
-        });
-    }
-      
      res.status(200).json({status:true,message:allProduct})
-
-
 }))
 
 
@@ -71,7 +61,7 @@ productRouter.delete("/delete/:id",catchAsyncError(async(req,res,next)=>{
 
 
 
-productRouter.put("/update/:id",catchAsyncError(async(req,res,next)=>{
+productRouter.put("/update/:id",productUpload.array("images",10),catchAsyncError(async(req,res,next)=>{
     
     let id=req.params.id
     if(!id){
@@ -81,13 +71,18 @@ productRouter.put("/update/:id",catchAsyncError(async(req,res,next)=>{
      return next(new Errorhadler("Invalid ObjectId", 400));
     }
     
-    const { email,name, description,category,tags,price,stock} = req.body;
-    console.log(req.files)
-    // const images =req.files.map((file)=>file.path);
-    // console.log(email,name, description,category,tags,price,images);
-
-    await ProductModel.findByIdAndUpdate(id,req.body)
-    res.status(200).json({status:true,message:"updated successfully"})
+    let { email,name, description,category,tags,price,stock,images} = req.body;
+    const imagesArr =req.files.map((file)=>path.basename(file.path));
+    console.log(images,imagesArr)
+    if(!images){
+        images=[]
+    }
+    else{
+        images =Array.isArray(images)?images:[images]
+    }
+    console.log(images,imagesArr,"88")
+    const updated =await ProductModel.findByIdAndUpdate(id,{ email,name, description,category,tags,price,stock,images:[...imagesArr,...images]},{new:true})
+    res.status(200).json({status:true,message:"updated successfully",data:updated})
     
 }))
 

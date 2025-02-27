@@ -45,10 +45,6 @@ export default function SellerProcutPage() {
      
   }
 
- 
- 
-
- 
 
 
     return (
