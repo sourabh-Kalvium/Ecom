@@ -7,6 +7,7 @@ function CreateProduct() {
 
     const location = useLocation();
     const productData =location.state || {}
+    
     const { _id, email, name, description, category, tags, price, stock, images, edit } = productData
 
     console.log(images)
@@ -32,18 +33,17 @@ function CreateProduct() {
 
     useEffect(()=>{
         setFormData({
-            ...formData,
-            email,
-            name,
-            description,
-            category,
-            tags,
-            price,
-            stock,
-            images,
-            previewImg:prevImg
-        })
-    },[productData])
+            email: email || "",
+            name: name || "",
+            description: description || "",
+            category: category || "",
+            tags: tags || [],
+            price: price || "",
+            stock: stock || "",
+            images: images || [],
+            previewImg: prevImg || []
+        });
+    }, [email, name, description, category, tags, price, stock, images]);
    
 
     const handleDeletePrevImg =(index)=>{
