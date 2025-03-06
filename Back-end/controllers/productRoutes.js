@@ -13,12 +13,13 @@ productRouter.post("/create-product",productUpload.array("images",10), catchAsyn
     const { email,name, description,category,tags,price,stock} = req.body;
 
     const images =req.files.map((file)=>path.basename(file.path));
-    console.log(email,name, description,category,tags,price,images);
+    console.log(email,name, description,category,tags,price,images,"////");
 
     if (!email ||!name ||!description ||!category ||!tags ||!price ||!images ||!stock) {
        return  next(new Errorhadler("All fields are required",400))
     }
     let user=await UserModel.findOne({email})
+
     console.log(email)
     if(!user){
         return next(new Errorhadler("user is not exist",404))
