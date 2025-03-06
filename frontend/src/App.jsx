@@ -8,13 +8,14 @@ import Home from './pages/Home'
 import Navbar from './pages/Navbar'
 import Createproudct from './components/Createproudct'
 import SellerProcutPage from "./pages/SellerProductPage"
+import NavBar from "./components/nav"
 function App() {
   
 
   return (
     <>
       <BrowserRouter>
-        <Navbar/>
+        <NavBar/>
        <Routes>
             <Route  path="/"  element={<Home/>}/>
             <Route path="/login" element={<Login/>}/>
