@@ -39,6 +39,13 @@ productRouter.get("/allproduct", catchAsyncError(async(req, res, next)=>{
      res.status(200).json({status:true,message:allProduct})
 }))
 
+productRouter.get("/individualproduct/:id", catchAsyncError(async(req, res, next)=>{
+    let id=req.params.id
+    let product = await ProductModel.findById(id)
+    res.status(200).json({status:true,message:product})
+}))
+
+
 
 
 

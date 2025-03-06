@@ -1,10 +1,9 @@
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
 
-export default function ProductCard({ _id,email, name, description, category, tags, price, stock, images ,role,dele}) {
+
+export default function ProductCard({ _id,email, name, description, category, tags, price, stock, images ,role,dele,click}) {
    console.log(dele)
 
   let navigate =useNavigate()
@@ -19,7 +18,7 @@ export default function ProductCard({ _id,email, name, description, category, ta
 
   const editDeleleCom=()=>{
     return (
-      <div>
+      <div >
         <button onClick={edit} className="w-full text-white px-4 py-1 mt-2 rounded-md bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300 ease-in-out">
           edit
         </button>
@@ -48,7 +47,7 @@ export default function ProductCard({ _id,email, name, description, category, ta
       </div>
       <div className="w-full mt-3">
         <p className="text-md font-semibold text-gray-900">${price}</p>
-        <button className="w-full text-white px-4 py-1 mt-2 rounded-md bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300 ease-in-out">
+        <button onClick={click} className="w-full text-white px-4 py-1 mt-2 rounded-md bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300 ease-in-out">
           More Info
         </button>
 
