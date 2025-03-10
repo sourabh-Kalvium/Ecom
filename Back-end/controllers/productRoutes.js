@@ -135,7 +135,24 @@ productRouter.post('/cart',auth, catchAsyncError(async (req, res, next) => {
     });
 }));
 
+productRouter.get("/cart",auth,catchAsyncError(async(req,res,next)=>{
+     
+    let userID=req.user_id
+    if(!userID){
+      return next(new Errorhadler("user id is required", 404));
+    }
+    if (!mongoose.Types.ObjectId.isValid(userID)) {
+      return next(new Errorhadler("Invalid userId", 400));
+    }
 
+    let cart=await UserModel.findById(userID).populate({
+       path:"cart.productId",
+       model:"Product"
+    })
+    
+    res.status(200).json({status:true,message:cart})
+
+}))
 
 
 
