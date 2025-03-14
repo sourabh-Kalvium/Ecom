@@ -9,6 +9,7 @@ import Createproudct from './components/Createproudct'
 import SellerProcutPage from "./pages/SellerProductPage"
 import NavBar from "./components/nav"
 import IndividualProduct from './pages/IndividualProduct'
+import Cart from './pages/cart'
 function App() {
   
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/create" element={<Createproudct/>}></Route>
             <Route path="/modify" element={<SellerProcutPage/>}></Route>
             <Route path="/pro" element={<IndividualProduct/>}></Route>
+            <Route path="/cart" element={<Cart/>}></Route>
 
        </Routes>
      </BrowserRouter>
