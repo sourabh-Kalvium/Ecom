@@ -160,8 +160,9 @@ export default function Profile() {
 										No Addresses Found
 									</div>
 								) : null}
+								{[console.log(addresses)]}
 								{addresses.map((address, index) => (
-									<AddressCard key={index} {...address} />
+									<AddressCard key={address._id} {...address} />
 								))}
 							</div>
 						</div>
