@@ -153,12 +153,19 @@ userRoute.post("/login",catchAsyncError(async (req, res, next) => {
 
 
   userRoute.put("/add-address",auth,catchAsyncError(async (req, res, next) => {
-       
+        console.log("hello")
     let userId=req.user_id
     if(!userId){
       return next(new Errorhadler("user id not found", 400));
     }
-    let user=await UserModel.findByIdAndUpdate(userId,req.body).select("name email role address profilePhoto");
+    const {country,city,address,pincode,addressType}=req.body
+
+    if(!country|| !city ||!address ||!pincode|| !addressType){
+      return next(new Errorhadler("country,city,address,pincode,addressType all feilda are required", 400));
+    }
+    let user=await UserModel.findByIdAndUpdate(userId,
+      { $push: { address: req.body } },
+      { new: true } )
     res.status(200).json({status:true,message:user})
   }));
 

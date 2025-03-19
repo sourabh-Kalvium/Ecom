@@ -23,13 +23,13 @@ const CreateAddress = () => {
         };
          console.log(addressData)
         try {
-            const response = await axios.post("will add the api here ",addressData,{
+            const response = await axios.put("http://localhost:8080/user/add-address",addressData,{
                 withCredentials:true
             })
                 
             if (response.status === 201) {
                 alert("Address added successfully!");
-                navigate("/profile");
+                
             }
         } catch (err) {
             console.error("Error adding address:", err);

@@ -2,9 +2,9 @@ export default function AddressCard({
 	_id,
 	country,
 	city,
-	district,
+	address,
 	pincode,
-	area,
+	addressType
 }) {
 	return (
 		<div className="w-full h-max bg-transparent p-5 rounded-lg border border-neutral-600 grid grid-cols-12 gap-5">
@@ -31,10 +31,10 @@ export default function AddressCard({
 			<div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2">
 				<div className="w-full h-max bg-neutral-700 rounded-lg flex flex-col gap-y-2">
 					<div className="w-full h-max break-all text-xl text-neutral-200">
-                    district
+                    address
 					</div>
 					<div className="w-full h-max break-all text-lg font-light text-neutral-200">
-						{district}
+						{address}
 					</div>
 				</div>
 			</div>
@@ -51,20 +51,10 @@ export default function AddressCard({
 			<div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2">
 				<div className="w-full h-max bg-neutral-700 rounded-lg flex flex-col gap-y-2">
 					<div className="w-full h-max break-all text-xl text-neutral-200">
-						Zip Code
+                    addressType
 					</div>
 					<div className="w-full h-max break-all text-lg font-light text-neutral-200">
-						{zipCode}
-					</div>
-				</div>
-			</div>
-			<div className="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2">
-				<div className="w-full h-max bg-neutral-700 rounded-lg flex flex-col gap-y-2">
-					<div className="w-full h-max break-all text-xl text-neutral-200">
-                    area
-					</div>
-					<div className="w-full h-max break-all text-lg font-light text-neutral-200">
-						{area}
+						{addressType}
 					</div>
 				</div>
 			</div>
