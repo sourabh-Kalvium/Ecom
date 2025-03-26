@@ -12,12 +12,15 @@ function Order() {
     console.log(totalPrice)
 
     const handleClick=async()=>{
+
         let products=cartData.map((ele)=>{
             return {quantity:ele.quantity,product:ele.productId._id,price:ele.productId.price}
         })
         
         let shippingAddreess=address.filter((ele)=>ele._id==selectedAddress)
-       
+        if(shippingAddreess.length==0){
+            alert("please select one shipping address")
+        }
        
         try {
             let response=await axios.post("http://localhost:8080/user/order",{
