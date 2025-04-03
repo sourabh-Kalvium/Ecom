@@ -57,7 +57,7 @@ orderRouter.post("/place-order", auth, catchAsyncError(async (req, res, next) =>
         return next(new Errorhadler("Total amount must be a positive number", 400));
       }
   
-      // Order creation in parallel
+    
       const orderPromises = orderItems.map(async (item) => {
         const totalAmount = item.price * item.quantity;
         let newOrder = new orderModel({
@@ -69,7 +69,7 @@ orderRouter.post("/place-order", auth, catchAsyncError(async (req, res, next) =>
         return newOrder.save({ session }); 
       });
   
-       await Promise.all(orderPromises);
+      await Promise.all(orderPromises);
   
       await UserModel.findByIdAndUpdate(userId, { cart: [] }, { session });
   
@@ -95,12 +95,20 @@ orderRouter.post("/place-order", auth, catchAsyncError(async (req, res, next) =>
   }));
 
 
+  
   orderRouter.get("/my-order", auth, catchAsyncError(async (req, res, next) => {
       let userId = req.user_id;
       if (!userId) {
         return next(new Errorhadler("User ID not found", 400));
       }
-      const orders =await orderModel.find({user:userId}).populate({path:"orderItems.product"}).select("orderItems")
+      const orders =await orderModel.find({
+                                           user:userId,
+                                           orderStatus: { $in: ["Processing", "Shipped"] }
+                                          }
+                                        ).populate(
+                                            {path:"orderItems.product"}
+                                         ).select("orderItems")
+
       res.status(200).json({
         success: true,
         message: orders
@@ -110,9 +118,19 @@ orderRouter.post("/place-order", auth, catchAsyncError(async (req, res, next) =>
   }));
 
 
-  orderRouter.delete("/cancell-order", auth, catchAsyncError(async (req, res, next) => {
-    
-        
+  orderRouter.patch("/cancell-order/:id", auth, catchAsyncError(async (req, res, next) => {
+      
+        let id=req.params.id
+        if(!id){
+            return next(new Errorhadler("ID not found", 400));
+        }
+
+        await orderModel.findByIdAndUpdate(id,{orderStatus:"Cancelled"})
+
+        res.status(200).json({
+            success: true,
+            message: "cancelled the order"
+        })  
   }));
 
 
