@@ -15,7 +15,7 @@ app.use(cors({
 const {userRoute} = require('./controllers/userRoute');
 
 const productRouter = require("./controllers/productRoutes");
-
+const orderRouter =require("./controllers/orderRoute")
 
 
 app.get("/test", async (req, res) => {
@@ -32,6 +32,7 @@ app.use('/products-photo', express.static(path.join(__dirname, 'uploadproducts')
 
 app.use("/user",userRoute)
 app.use("/product", productRouter);
+app.use("/order",orderRouter)
 
 
 
